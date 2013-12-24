@@ -1,7 +1,6 @@
 {
     "docs"      : {"前端记事本儿": "docs/fe"},
     "template"    : "default",
-    "domain_alias" :  ["guagua"],    
     "perpage"   : 10,
     "order"  : "number",
     "types"     : {
