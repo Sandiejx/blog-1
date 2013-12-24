@@ -1,0 +1,18 @@
+{
+    "docs"      : ["前端记事本儿": "docs/fe"],
+    "template"    : "default",
+    "domain_alias" :  ["guagua"],    
+    "perpage"   : 10,
+    "order"  : "number",
+    "types"     : {
+        "\\.(md||markdown)$"   : "markdown", 
+        "\\.(js||css||json)$"  : "code",
+        "\\.html?$"            : "html",
+        ".*"                   : "text"        
+    },
+    "title"  : "Melon Space",
+    "description" : "Welcome! Fellows~",
+    "comment"  : {"type":"disqus", "short_name":"gitpress"},
+    "friends"  : [
+    ] 
+}
