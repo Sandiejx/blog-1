@@ -1,5 +1,5 @@
 {
-    "docs"      : {"前端记事本儿": "docs/fe", "胡言乱语": "docs/life"},
+    "docs"      : {"CSS": "docs/css", "Life": "docs/life"},
     "template"    : "default",
     "perpage"   : 10,
     "order"  : "number",
