@@ -1,6 +1,6 @@
 {
     "docs"      : {"CSS": "docs/css", "Life": "docs/life"},
-    "template"    : "greyshade",
+    "template"    : "pithiness",
     "perpage"   : 10,
     "order"  : "number",
     "types"     : {
