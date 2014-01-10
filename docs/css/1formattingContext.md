@@ -1,7 +1,17 @@
-# Fomatting context 
+#BFC 
 
-## Box: CSS布局的基本单位
-`Box`是CSS布局的对象和基本单位。文档会根据元素和display属性生成不同的`Box`，类型不同的`Box`又会参与不同的`Formatting context`（拥有一套渲染规则的独立区域, 下面会提到）， 因此被渲染的方式也不同。 让我们来看看有哪些盒子：
+`BFC`已经是一个耳听熟闻的词语了，网上有许多关于`BFC`的文章，介绍了如何触发`BFC`， 以及`BFC`的一些用处（如清浮动，防止margin重叠等）。虽然我知道如何利用`BFC`解决这些问题，但当别人问我`BFC`是什么，我还是不能很有底气地解释清楚。于是这两天仔细阅读了CSS2.1 spec, 和许多文章，来解答我心中的这些疑惑：
+
+1.` BFC`是个什么？  
+2. 哪些元素会生成`BFC`  
+3. `BFC`的作用及原理
+
+## 一、BFC是什么？
+在解释`BFC`是什么之前，需要先介绍`Box`, `Formatting context`的概念。
+
+### Box: CSS布局的基本单位
+`Box`是CSS布局的对象和基本单位， 直观点来说，就是一个页面是由很多个`Box`组成的。元素的类型和display属性，决定了这个`Box`的类型。 不同类型的`Box`， 会参与不同的`Formatting context`(一个决定如何渲染文档的容器)，因此`Box`内的元素会以不同的方式渲染。让我们看看有哪些盒子：
+ 
 
 - `block-level box`: display属性为block, list-item, table的元素，会生成`block-level box`。并且参与`block fomatting context`。
 
@@ -9,39 +19,185 @@
 
 - `run-in box`: css3中才有， 这儿先不讲了
 
-## Formatting context
-
-### Formatting context是什么？
-
+### Formatting context
 `Formatting context`是W3C CSS2.1规范中的一个概念。它是页面中的一块渲染区域，并且有一套渲染规则，它决定了其子元素将如何定位，以及和其他元素的关系和相互作用。  
 
-CSS2.1 中只有BFC和IFC, CSS3中还增加了GFC和FFC
+最常见的`Formatting context`有`Block fomatting context`(简称`BFC`)和`Inline formatting context`(简称`IFC`)。
 
-### BFC
+CSS2.1 中只有`BFC`和`IFC`, CSS3中还增加了`GFC`和`FFC`
 
-#### 内部布局规则：
+
+### BFC 定义
+`BFC`(`Block formatting context`)直译为"块级格式化上下文"。它是一个独立的渲染区域，只有`Block-level box`参与， 它规定了内部的`Block-level Box`如何布局，并且与这个区域外部毫不相干。
+
+#### BFC布局规则：
 1. 内部的`Box`会在垂直方向，一个接一个地放置。
 2. `Box`垂直方向的距离由margin决定。属于同一个`BFC`的两个相邻`Box`的margin会发生重叠  
-(通过触发BFC放置margin折叠，见Demo)
-3. 每个元素的margin box的左边， 与包含块border box的左边相接触
+3. 每个元素的margin box的左边， 与包含块border box的左边相接触(对于从左往右的格式化，否则相反)。即使存在浮动也是如此。
 4. `BFC`的区域不会与`float box`重叠。  
-(因此可以通过触发BFC清浮动， 见Demo)
-5. `BFC`就是页面上的一个隔离的独立容器，容器里面的子元素会影响到外面的元素。反之也如此。
+5. `BFC`就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面的元素。反之也如此。
+6. 计算`BFC`的高度时，浮动元素也参与计算
 
-#### BFC能用来做什么?
-1. 自适应两栏布局。(根据布局规则4)
-2. 清除元素内部浮动。(根据布局规则5)
-3. 解决margin重叠(根据布局规则2)
-
-#### 如何产生BFC:
-
-可由一下任意条件触发：  
-
-1. 是根元素
+## 二、哪些元素会生成BFC?
+1. 根元素
 2. float属性不为none
 3. position为absolute或fixed
 4. display为inline-block, table-cell, table-caption, flex, inline-flex
 5. overflow不为visible
 
-### IFC
-待续。
+## 三、BFC的作用及原理
+
+### 1. 自适应两栏布局
+代码：
+```html
+<style>
+    body {
+        width: 300px;
+        position: relative;
+    }
+    
+    .aside {
+        width: 100px;
+        height: 150px;
+        float: left;
+        background: #f66;
+    }
+
+    .main {
+        height: 200px;
+        background: #fcc;
+    }
+</style>
+<body>
+    <div class="aside"></div>
+    <div class="main"></div>
+</body>
+```
+页面：  
+![此处输入图片的描述][1]
+
+根据`BFC`布局规则第3条：
+>每个元素的margin box的左边， 与包含块border box的左边相接触(对于从左往右的格式化，否则相反)。即使存在浮动也是如此。
+
+因此，虽然存在浮动的元素aslide，但main的左边依然会与包含块的左边相接触。
+
+根据`BFC`布局规则第四条：
+>`BFC`的区域不会与`float box`重叠。
+
+我们可以通过通过触发main生成`BFC`， 来实现自适应两栏布局。
+```css
+.main {
+    overflow: hidden;
+}
+```
+当触发main生成`BFC`后，这个新的`BFC`不会与浮动的aside重叠。因此会根据包含块的宽度，和aside的宽度，自动变窄。效果如下：  
+![此处输入图片的描述][2]
+
+
+### 2. 清除内部浮动
+代码: 
+```html
+<style>
+    .par {
+	    border: 5px solid #fcc;
+	    width: 300px;
+    }
+
+    .child {
+	    border: 5px solid #f66;
+	    width:100px;
+	    height: 100px;
+	    float: left;
+    }
+</style>
+<body>
+    <div class="par">
+	    <div class="child"></div>
+	    <div class="child"></div>
+    </div>
+</body>
+```
+页面：   
+![此处输入图片的描述][3]
+
+根据`BFC`布局规则第六条：
+>计算`BFC`的高度时，浮动元素也参与计算
+
+为达到清除内部浮动，我们可以触发par生成`BFC`，那么par在计算高度时，par内部的浮动元素child也会参与计算。
+
+代码：
+```css
+.par {
+    overflow: hidden;
+}
+```
+
+效果如下：  
+![此处输入图片的描述][4]
+￼
+### 3. 防止垂直margin重叠
+代码：
+```html
+<style>
+    p {
+        color: #f55;
+        background: #fcc;
+        width: 200px;
+        line-height: 100px;
+        text-align:center;
+        margin: 100px;
+    }
+</style>
+<body>
+    <p>Haha</p>
+    <p>Hehe</p>
+</body>
+```
+页面：  
+![此处输入图片的描述][5]
+
+两个p之间的距离为100px，发送了margin重叠。  
+根据BFC布局规则第二条：
+>`Box`垂直方向的距离由margin决定。属于同一个`BFC`的两个相邻`Box`的margin会发生重叠  
+
+我们可以在p外面包裹一层容器，并触发该容器生成一个`BFC`。那么两个P便不属于同一个`BFC`，就不会发生margin重叠了。  
+代码：
+```html
+<style>
+    .wrap {
+        overflow: hidden;
+    }
+    p {
+        color: #f55;
+        background: #fcc;
+        width: 200px;
+        line-height: 100px;
+        text-align:center;
+        margin: 100px;
+    }
+</style>
+<body>
+    <p>Haha</p>
+    <div class="wrap">
+        <p>Hehe</p>
+    </div>
+</body>
+```
+
+效果如下:  
+![此处输入图片的描述][6]
+
+## 总结
+其实以上的几个例子都体现了`BFC`布局规则第五条：
+>`BFC`就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面的元素。反之也如此。
+
+因为`BFC`内部的元素和外部的元素绝对不会互相影响，因此， 当`BFC`外部存在浮动时，它不应该影响`BFC`内部Box的布局，`BFC`会通过变窄，而不与浮动有重叠。同样的，当`BFC`内部有浮动时，为了不影响外部元素的布局，`BFC`计算高度时会包括浮动的高度。避免margin重叠也是这样的一个道理。  
+ 
+
+
+  [1]: http://p1.qhimg.com/d/inn/4055c62a/4dca44a927d4c1ffc30e3ae5f53a0b79.png
+  [2]: http://p6.qhimg.com/t01077886a9706cb26b.png
+  [3]: http://p1.qhimg.com/t016035b58195e7909a.png
+  [4]: http://p2.qhimg.com/t016bbbe5236ef1ffd5.png
+  [5]: http://p5.qhimg.com/t01b47b8b7d153c07cc.png
+  [6]: http://p3.qhimg.com/t0118d1d2badbb00521.png
