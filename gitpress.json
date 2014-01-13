@@ -10,7 +10,7 @@
     },
     "title"  : "Melon Space",
     "description" : "我是瓜瓜~瓜瓜就是我~我为瓜瓜代言",
-    "comment"  : {"type": "duoshuo", "short_name": "melon"},
+    "comment"  : {"type": "duoshuo", "short_name":"melon"},
     "friends"  : [
         {
                 "name"  : "Akira's Blog",
