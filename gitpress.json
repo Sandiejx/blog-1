@@ -11,7 +11,7 @@
     },
     "title"  : "Melon Space",
     "description" : "Welcome! Fellows~",
-    "comment"  : {"type":"duoshuo", "short_name":"gitpress"},
+    "comment"  : "on",
     "friends"  : [
     ] 
 }
