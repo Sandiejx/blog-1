@@ -2,7 +2,6 @@
     "docs"      : {"CSS": "docs/css", "Life": "docs/life"},
     "template"    : "pithiness",
     "perpage"   : 10,
-    "order"  : "number",
     "types"     : {
         "\\.(md||markdown)$"   : "markdown", 
         "\\.(js||css||json)$"  : "code",
@@ -10,8 +9,53 @@
         ".*"                   : "text"        
     },
     "title"  : "Melon Space",
-    "description" : "Welcome! Fellows~",
-    "comment"  : "on",
+    "description" : "我是瓜瓜~瓜瓜就是我~我为瓜瓜代言",
+    "comment"  : {"type": "duoshuo", "short_name": "melon"},
     "friends"  : [
+        {
+                "name"  : "Akira's Blog",
+                "title"  : "十年踪迹的博客",
+                "url"  : "http://blog.silverna.org/"                  
+        },
+        {
+                "name"  : "JerryQu的小站",
+                "title"  : "屈屈的博客",
+                "url"  : "http://imququ.com"                  
+        },
+        {
+                "name" : "welefen",
+                "title": "welefen",
+                "url"  : "http://www.welefen.com/"
+        },
+        {
+                "name"  : "奇舞团",
+                "title"  : "奇舞团官方博客",
+                "url"  : "http://www.75team.com"
+        },
+        {
+                "name" : "奇舞周刊",
+                "title" : "奇舞周刊",
+                "url" : "http://www.75team.com/weekly/"
+        },
+        {
+                "name"  : "typeof.net",
+                "title" : "typeof.net",
+                "url"  :  "http://typeof.net/"
+        },
+        {
+                "name"  : "never-online",
+                "title" : "rank's technical notes",
+                "url"        : "http://never-online.net/blog/"
+        },
+        {
+                "name"  : "aoao",
+                "title" : "样式之美 | 没落的角落",
+                "url"   : "http://www.aoao.org.cn/"
+        },
+        {
+                "name" : "前端开源推荐",
+                "title": "前端开源推荐",
+                "url"  : "http://boke.us/tags/weekly/"
+        }
     ] 
 }
